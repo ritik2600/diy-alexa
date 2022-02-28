@@ -11,6 +11,9 @@
 #include "IntentProcessor.h"
 #include "Speaker.h"
 #include "IndicatorLight.h"
+#include <WiFiMulti.h>
+
+WiFiMulti wifiMulti;
 
 // i2s config for using the internal ADC
 i2s_config_t adcI2SConfig = {
@@ -78,8 +81,24 @@ void setup()
   Serial.println("Starting up");
   // start up wifi
   // launch WiFi
+  /*
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PSWD);
+  */
+  wifiMulti.addAP(_MULTI_SSID1, _MULTI_KEY1);
+  wifiMulti.addAP(_MULTI_SSID2, _MULTI_KEY2);
+  wifiMulti.addAP(_MULTI_SSID3, _MULTI_KEY3);
+
+  for(int i = 0; i<10; i++) {
+    if ((wifiMulti.run() == WL_CONNECTED)) {
+      Serial.println("connected to WiFi");
+    } else {
+      Serial.println("not connected to WiFi");
+      delay(200);
+    }
+  }
+
+  Serial.printf("ssid=%s\n", WIFI_SSID);
   if (WiFi.waitForConnectResult() != WL_CONNECTED)
   {
     Serial.println("Connection Failed! Rebooting...");
@@ -113,9 +132,10 @@ void setup()
 
   // and the intent processor
   IntentProcessor *intent_processor = new IntentProcessor(speaker);
-  intent_processor->addDevice("kitchen", GPIO_NUM_5);
-  intent_processor->addDevice("bedroom", GPIO_NUM_21);
-  intent_processor->addDevice("table", GPIO_NUM_23);
+  intent_processor->addDevice("kitchen", GPIO_NUM_4);
+  intent_processor->addDevice("bedroom", GPIO_NUM_26);
+  intent_processor->addDevice("table", GPIO_NUM_25);
+  intent_processor->addDevice("lights", GPIO_NUM_25);
 
   // create our application
   Application *application = new Application(i2s_sampler, intent_processor, speaker, indicator_light);

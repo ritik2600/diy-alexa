@@ -44,7 +44,8 @@ IndicatorLight::IndicatorLight()
 {
     // use the build in LED as an indicator - we'll set it up as a pwm output so we can make it glow nicely
     ledcSetup(0, 10000, 8);
-    ledcAttachPin(2, 0);
+    // ledcAttachPin(2, 0);
+    ledcAttachPin(LED_BUILTIN, 0);
     ledcWrite(0, 0);
     // start off with the light off
     m_state = OFF;

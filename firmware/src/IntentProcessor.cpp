@@ -9,6 +9,12 @@ IntentProcessor::IntentProcessor(Speaker *speaker)
 
 IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
 {
+  Serial.printf(
+    "turnOnDevice: confidence=%.f%%; device_name=%s; trait_value=%s; trait_confidence=%.f%%\n",
+    intent.intent_confidence, intent.device_name.c_str(),
+    intent.trait_value.c_str(), intent.trait_confidence
+  );
+
     if (intent.intent_confidence < 0.8)
     {
         Serial.printf("Only %.f%% certain on intent\n", 100 * intent.intent_confidence);

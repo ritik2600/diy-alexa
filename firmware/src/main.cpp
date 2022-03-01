@@ -12,6 +12,7 @@
 #include "Speaker.h"
 #include "IndicatorLight.h"
 #include <WiFiMulti.h>
+#include <dotstar_wing.h>
 
 WiFiMulti wifiMulti;
 
@@ -149,9 +150,19 @@ void setup()
 #else
   i2s_sampler->start(I2S_NUM_0, adcI2SConfig, applicationTaskHandle);
 #endif
+
+  // init the dotstar wing if required
+#ifdef RUN_DOTSTAR_WING
+  dotstar_wing_setup();
+#endif
 }
 
 void loop()
 {
+  // run the dotstar wing if required
+#ifdef RUN_DOTSTAR_WING
+  dotstar_wing_loop();
+#else
   vTaskDelay(1000);
+#endif
 }

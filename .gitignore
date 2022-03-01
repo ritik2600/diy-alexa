@@ -158,3 +158,4 @@ speech_data
 *.model
 *.tflite
 logs
+marvin-private.h

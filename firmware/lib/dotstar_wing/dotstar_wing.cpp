@@ -51,6 +51,8 @@
 //   DOTSTAR_GBR  Pixels are wired for GBR bitstream (some older DotStars)
 //   DOTSTAR_BGR  Pixels are wired for BGR bitstream (APA102-2020 DotStars)
 
+bool state_on = false;
+
 Adafruit_DotStarMatrix matrix = Adafruit_DotStarMatrix(
                                   12, 6, MOSI, SCK, /* DATAPIN, CLOCKPIN, */
                                   DS_MATRIX_BOTTOM     + DS_MATRIX_LEFT +
@@ -99,18 +101,28 @@ int pass = 0;
 
 void dotstar_wing_loop() {
   matrix.fillScreen(0);
-  matrix.setCursor(x, 5);
-  for (byte i = 0; i < strlen(adafruit); i++) {
-    // set the color
-    matrix.setTextColor(adaColors[i]);
-    // write the letter
-    matrix.print(adafruit[i]);
-  }
+  if(state_on) {
+    matrix.setCursor(x, 5);
+    for (byte i = 0; i < strlen(adafruit); i++) {
+      // set the color
+      matrix.setTextColor(adaColors[i]);
+      // write the letter
+      matrix.print(adafruit[i]);
+    }
 
-  if (--x < -50) {
-    x = matrix.width();
-  }
+    if (--x < -50) {
+      x = matrix.width();
+    }
 
+  }
   matrix.show();
   delay(SHIFTDELAY);
+}
+
+// toggle the dotstar matrix
+void dotstar_wing_on() {
+  state_on = true;
+}
+void dotstar_wing_off() {
+  state_on = false;
 }

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "IntentProcessor.h"
 #include "Speaker.h"
+#include <dotstar_wing.h>
 
 IntentProcessor::IntentProcessor(Speaker *speaker)
 {
@@ -11,8 +12,8 @@ IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
 {
     Serial.printf(
       "turnOnDevice: confidence=%.f%%; device_name=%s; trait_value=%s; trait_confidence=%.f%%\n",
-      intent.intent_confidence, intent.device_name.c_str(),
-      intent.trait_value.c_str(), intent.trait_confidence
+      100 * intent.intent_confidence, intent.device_name.c_str(),
+      intent.trait_value.c_str(), 100 * intent.trait_confidence
     );
 
     if (intent.intent_confidence < 0.8)
@@ -50,6 +51,12 @@ IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
             digitalWrite(dev_pin.second, is_turn_on);
         }
     }
+    else if (intent.device_name == "matrix") {
+      if (is_turn_on)
+        dotstar_wing_on();
+      else
+        dotstar_wing_off();
+    }
     else
     {
         // see if the device name is something we know about
@@ -80,8 +87,8 @@ IntentResult IntentProcessor::processIntent(const Intent &intent)
 {
     Serial.printf(
       "processIntent: name=%s; confidence=%.f%%; trait_value=%s; trait_confidence=%.f%%\n",
-      intent.intent_name.c_str(), intent.intent_confidence,
-      intent.trait_value.c_str(), intent.trait_confidence
+      intent.intent_name.c_str(), 100 * intent.intent_confidence,
+      intent.trait_value.c_str(), 100 * intent.trait_confidence
     );
 
     if (intent.text.empty())

@@ -135,7 +135,6 @@ void setup()
   intent_processor->addDevice("kitchen", GPIO_NUM_4);
   intent_processor->addDevice("bedroom", GPIO_NUM_26);
   intent_processor->addDevice("table", GPIO_NUM_25);
-  intent_processor->addDevice("lights", GPIO_NUM_25);
 
   // create our application
   Application *application = new Application(i2s_sampler, intent_processor, speaker, indicator_light);

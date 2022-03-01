@@ -9,11 +9,11 @@ IntentProcessor::IntentProcessor(Speaker *speaker)
 
 IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
 {
-  Serial.printf(
-    "turnOnDevice: confidence=%.f%%; device_name=%s; trait_value=%s; trait_confidence=%.f%%\n",
-    intent.intent_confidence, intent.device_name.c_str(),
-    intent.trait_value.c_str(), intent.trait_confidence
-  );
+    Serial.printf(
+      "turnOnDevice: confidence=%.f%%; device_name=%s; trait_value=%s; trait_confidence=%.f%%\n",
+      intent.intent_confidence, intent.device_name.c_str(),
+      intent.trait_value.c_str(), intent.trait_confidence
+    );
 
     if (intent.intent_confidence < 0.8)
     {
@@ -78,6 +78,12 @@ IntentResult IntentProcessor::life()
 
 IntentResult IntentProcessor::processIntent(const Intent &intent)
 {
+    Serial.printf(
+      "processIntent: name=%s; confidence=%.f%%; trait_value=%s; trait_confidence=%.f%%\n",
+      intent.intent_name.c_str(), intent.intent_confidence,
+      intent.trait_value.c_str(), intent.trait_confidence
+    );
+
     if (intent.text.empty())
     {
         Serial.println("No text recognised");

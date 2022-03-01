@@ -89,6 +89,10 @@ int WAVFileReader::getFrames(Frame_t *frames, int number_frames)
             // otherwise read in the right channel sample
             m_file.read((uint8_t *)(&frames[i].right), sizeof(int16_t));
         }
+
+        // reduce volume
+        frames[i].left *= 0.2;
+        frames[i].right *= 0.2;
     }
     return number_frames;
 }

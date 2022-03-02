@@ -6,6 +6,7 @@
 #include <Adafruit_DotStarMatrix.h>
 #include <Adafruit_DotStar.h>
 #include <Fonts/TomThumb.h>
+#include <dotstar_wing.h>
 
 #if defined(ESP8266)
   #define DATAPIN    13
@@ -22,6 +23,9 @@
 #elif defined(ARDUINO_ARCH_WICED)
   #define DATAPIN    PA4
   #define CLOCKPIN   PB5
+#elif defined(ARDUINO_FEATHER_ESP32) // hardware spi on feather huzzah32
+  #define DATAPIN    MOSI
+  #define CLOCKPIN   SCK
 #elif defined(ESP32) && !defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S2)
   #define DATAPIN    27
   #define CLOCKPIN   13
@@ -54,7 +58,7 @@
 bool state_on = false;
 
 Adafruit_DotStarMatrix matrix = Adafruit_DotStarMatrix(
-                                  12, 6, MOSI, SCK, /* DATAPIN, CLOCKPIN, */
+                                  12, 6, DATAPIN, CLOCKPIN,
                                   DS_MATRIX_BOTTOM     + DS_MATRIX_LEFT +
                                   DS_MATRIX_ROWS + DS_MATRIX_PROGRESSIVE,
                                   DOTSTAR_BGR);
@@ -98,25 +102,58 @@ void dotstar_wing_setup() {
 
 int x = matrix.width();
 int pass = 0;
+int red = 128, green = 128, blue = 128;
 
 void dotstar_wing_loop() {
-  matrix.fillScreen(0);
-  if(state_on) {
-    matrix.setCursor(x, 5);
-    for (byte i = 0; i < strlen(adafruit); i++) {
-      // set the color
-      matrix.setTextColor(adaColors[i]);
-      // write the letter
-      matrix.print(adafruit[i]);
-    }
+  dotstar_wing_show_colour();
+  dotstar_wing_show_text();
+  x = matrix.width();
+}
 
-    if (--x < -50) {
-      x = matrix.width();
-    }
+// TODO remove delays
 
+void dotstar_wing_show_text() {
+  matrix.setBrightness(BRIGHTNESS);
+  for(int iter = 0; iter < strlen(adafruit) * 3; iter++) {
+    matrix.fillScreen(0);
+    if(state_on) {
+      matrix.setCursor(x, 5);
+      for (byte i = 0; i < strlen(adafruit); i++) {
+        // set the color
+        matrix.setTextColor(adaColors[i]);
+        // write the letter
+        matrix.print(adafruit[i]);
+      }
+
+      if (--x < -50) {
+        x = matrix.width();
+      }
+    }
+    matrix.show();
+    delay(SHIFTDELAY);
   }
+}
+
+void dotstar_wing_show_colour() {
+  if(! state_on) return;
+
+  bool ascending = true;
+  for(int b = 50; b <= 150 && b >= 50;  ) {
+    matrix.setBrightness(b);
+    matrix.fillScreen(matrix.Color(red, green, blue));
+    matrix.show();
+    if(ascending)
+      b++;
+    else
+      b--;
+    if(b == 150)
+      ascending = false;
+    else if(b < 50)
+      break;
+    delay(SHIFTDELAY / 5);
+  }
+  matrix.fillScreen(0);
   matrix.show();
-  delay(SHIFTDELAY);
 }
 
 // toggle the dotstar matrix

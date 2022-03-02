@@ -7,3 +7,5 @@ void dotstar_wing_setup();
 void dotstar_wing_loop();
 void dotstar_wing_on();
 void dotstar_wing_off();
+void dotstar_wing_show_colour();
+void dotstar_wing_show_text();

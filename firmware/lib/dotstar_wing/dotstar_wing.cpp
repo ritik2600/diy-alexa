@@ -55,7 +55,7 @@
 //   DOTSTAR_GBR  Pixels are wired for GBR bitstream (some older DotStars)
 //   DOTSTAR_BGR  Pixels are wired for BGR bitstream (APA102-2020 DotStars)
 
-bool state_on = false;
+bool state_on = true;
 
 Adafruit_DotStarMatrix matrix = Adafruit_DotStarMatrix(
                                   12, 6, DATAPIN, CLOCKPIN,
@@ -98,47 +98,46 @@ void dotstar_wing_setup() {
     matrix.show();
     delay(500);
   }
+  dotstar_wing_show_text();
 }
 
 int x = matrix.width();
 int pass = 0;
-int red = 128, green = 128, blue = 128;
+int red = 128, green = 160, blue = 192;
+
+int loopIteration = 0;                  // iterator for up slicing main loop
+const int LOOP_ROLLOVER = 300000;       // how many loops per action sequence
+int TICK_DO_MATRIX = 1000;              // do matrix display
 
 void dotstar_wing_loop() {
-  // dotstar_wing_show_colour();
-  dotstar_wing_show_text();
-  // x = matrix.width();
+  if(loopIteration == TICK_DO_MATRIX)   // redisplay the matrix
+    dotstar_wing_show_colour();
+  if(loopIteration++ == LOOP_ROLLOVER)  // roll over
+    loopIteration = 0;
 }
 
-// TODO remove delays
-
 void dotstar_wing_show_text() {
-  // matrix.setBrightness(BRIGHTNESS);
-  // for(int iter = 0; iter < strlen(adafruit) * 3; iter++) {
+  for(int iter = 0; iter < strlen(adafruit) * 5; iter++) {
     matrix.fillScreen(0);
     if(state_on) {
       matrix.setCursor(x, 5);
       for (byte i = 0; i < strlen(adafruit); i++) {
-        // set the color
-        matrix.setTextColor(adaColors[i]);
-        // write the letter
-        matrix.print(adafruit[i]);
+        matrix.setTextColor(adaColors[i]); // set the color
+        matrix.print(adafruit[i]);         // write the letter
       }
 
-      if (--x < -50) {
-        x = matrix.width();
-      }
+      if(--x < -50) x = matrix.width();
     }
     matrix.show();
     delay(SHIFTDELAY);
-  // }
+  }
 }
 
 void dotstar_wing_show_colour() {
   if(! state_on) return;
 
   bool ascending = true;
-  for(int b = 50; b <= 150 && b >= 50;  ) {
+  for(int b = 20; b <= 170 && b >= 20;  ) {
     matrix.setBrightness(b);
     matrix.fillScreen(matrix.Color(red, green, blue));
     matrix.show();
@@ -146,14 +145,15 @@ void dotstar_wing_show_colour() {
       b++;
     else
       b--;
-    if(b == 150)
+    if(b == 170)
       ascending = false;
-    else if(b < 50)
+    else if(b < 20)
       break;
-    delay(SHIFTDELAY / 5);
+    delay(SHIFTDELAY / 10);
   }
   matrix.fillScreen(0);
   matrix.show();
+  yield();
 }
 
 // toggle the dotstar matrix

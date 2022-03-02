@@ -105,16 +105,16 @@ int pass = 0;
 int red = 128, green = 128, blue = 128;
 
 void dotstar_wing_loop() {
-  dotstar_wing_show_colour();
+  // dotstar_wing_show_colour();
   dotstar_wing_show_text();
-  x = matrix.width();
+  // x = matrix.width();
 }
 
 // TODO remove delays
 
 void dotstar_wing_show_text() {
-  matrix.setBrightness(BRIGHTNESS);
-  for(int iter = 0; iter < strlen(adafruit) * 3; iter++) {
+  // matrix.setBrightness(BRIGHTNESS);
+  // for(int iter = 0; iter < strlen(adafruit) * 3; iter++) {
     matrix.fillScreen(0);
     if(state_on) {
       matrix.setCursor(x, 5);
@@ -131,7 +131,7 @@ void dotstar_wing_show_text() {
     }
     matrix.show();
     delay(SHIFTDELAY);
-  }
+  // }
 }
 
 void dotstar_wing_show_colour() {

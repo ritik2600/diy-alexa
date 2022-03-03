@@ -162,7 +162,7 @@ void loop()
 {
   // run the dotstar wing if required
 #ifdef RUN_DOTSTAR_WING
-  dotstar_wing_loop();
+  if(dotstar_wing_state_on()) dotstar_wing_loop();
 #else
   vTaskDelay(1000);
 #endif

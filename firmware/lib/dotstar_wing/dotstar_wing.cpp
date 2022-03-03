@@ -110,6 +110,7 @@ const int LOOP_ROLLOVER = 300000;       // how many loops per action sequence
 int TICK_DO_MATRIX = 1000;              // do matrix display
 
 void dotstar_wing_loop() {
+  if(!state_on) return;
   if(loopIteration == TICK_DO_MATRIX)   // redisplay the matrix
     dotstar_wing_show_colour();
   if(loopIteration++ == LOOP_ROLLOVER)  // roll over
@@ -157,9 +158,6 @@ void dotstar_wing_show_colour() {
 }
 
 // toggle the dotstar matrix
-void dotstar_wing_on() {
-  state_on = true;
-}
-void dotstar_wing_off() {
-  state_on = false;
-}
+void dotstar_wing_on()  { state_on = true; }
+void dotstar_wing_off() { state_on = false; }
+bool dotstar_wing_state_on() { return state_on; }

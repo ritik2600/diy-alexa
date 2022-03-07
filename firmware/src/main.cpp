@@ -14,6 +14,11 @@
 #include <WiFiMulti.h>
 #include <dotstar_wing.h>
 
+// MAC address ///////////////////////////////////////////////////////////////
+extern char MAC_ADDRESS[];
+void getMAC(char *);
+char MAC_ADDRESS[13]; // MAC addresses are 12 chars, plus the NULL terminator
+
 WiFiMulti wifiMulti;
 
 // i2s config for using the internal ADC
@@ -99,6 +104,8 @@ void setup()
       delay(200);
     }
   }
+  getMAC(MAC_ADDRESS);            // store the MAC address as a chip identifier
+  Serial.printf("ESP32 MAC = %s\n", MAC_ADDRESS); // print the ESP's "ID"
 
   Serial.printf("ssid=%s\n", WIFI_SSID);
   if (WiFi.waitForConnectResult() != WL_CONNECTED)
@@ -166,4 +173,17 @@ void loop()
 #else
   vTaskDelay(1000);
 #endif
+}
+
+void getMAC(char *buf) { // the MAC is 6 bytes, so needs careful conversion...
+  uint64_t mac = ESP.getEfuseMac(); // ...to string (high 2, low 4):
+  char rev[13];
+  sprintf(rev, "%04X%08X", (uint16_t) (mac >> 32), (uint32_t) mac);
+
+  // the byte order in the ESP has to be reversed relative to normal Arduino
+  for(int i=0, j=11; i<=10; i+=2, j-=2) {
+    buf[i] = rev[j - 1];
+    buf[i + 1] = rev[j];
+  }
+  buf[12] = '\0';
 }

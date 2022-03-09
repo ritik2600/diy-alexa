@@ -18,6 +18,7 @@ class IntentProcessor
 private:
     std::map<std::string, int> m_device_to_pin;
     IntentResult turnOnDevice(const Intent &intent);
+    IntentResult changeColour(const Intent &intent);
     IntentResult tellJoke();
     IntentResult life();
 

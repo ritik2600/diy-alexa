@@ -16,7 +16,7 @@ IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
       intent.trait_value.c_str(), 100 * intent.trait_confidence
     );
 
-    if (intent.intent_confidence < 0.8)
+    if (intent.intent_confidence < 0.4)
     {
         Serial.printf("Only %.f%% certain on intent\n", 100 * intent.intent_confidence);
         return FAILED;
@@ -26,7 +26,7 @@ IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
         Serial.println("No device found");
         return FAILED;
     }
-    if (intent.device_confidence < 0.8)
+    if (intent.device_confidence < 0.4)
     {
         Serial.printf("Only %.f%% certain on device\n", 100 * intent.device_confidence);
         return FAILED;
@@ -36,7 +36,7 @@ IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
         Serial.println("Can't work out the intent action");
         return FAILED;
     }
-    if (intent.trait_confidence < 0.8)
+    if (intent.trait_confidence < 0.4)
     {
         Serial.printf("Only %.f%% certain on trait\n", 100 * intent.trait_confidence);
         return FAILED;
@@ -83,6 +83,16 @@ IntentResult IntentProcessor::life()
     return SILENT_SUCCESS;
 }
 
+IntentResult IntentProcessor::changeColour(const Intent &intent)
+{
+    Serial.printf(
+      "changeColour: confidence=%.f%%; device_name=%s; trait_value=%s; trait_confidence=%.f%%\n",
+      100 * intent.intent_confidence, intent.device_name.c_str(),
+      intent.trait_value.c_str(), 100 * intent.trait_confidence
+    );
+    return SUCCESS;
+}
+
 IntentResult IntentProcessor::processIntent(const Intent &intent)
 {
     Serial.printf(
@@ -114,6 +124,10 @@ IntentResult IntentProcessor::processIntent(const Intent &intent)
     if (intent.intent_name == "Life")
     {
         return life();
+    }
+    if (intent.intent_name == "Change_colour")
+    {
+        return changeColour(intent);
     }
 
     return FAILED;

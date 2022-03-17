@@ -96,6 +96,7 @@ void setup()
   wifiMulti.addAP(_MULTI_SSID3, _MULTI_KEY3);
   wifiMulti.addAP(_MULTI_SSID4, _MULTI_KEY4);
   wifiMulti.addAP(_MULTI_SSID5, _MULTI_KEY5);
+  wifiMulti.addAP(_MULTI_SSID6, _MULTI_KEY6);
 
   for(int i = 0; i<10; i++) {
     if ((wifiMulti.run() == WL_CONNECTED)) {

@@ -90,6 +90,11 @@ IntentResult IntentProcessor::changeColour(const Intent &intent)
       100 * intent.intent_confidence, intent.device_name.c_str(),
       intent.trait_value.c_str(), 100 * intent.trait_confidence
     );
+    Serial.printf(
+      "..............trait_colour_confidence=%.f%%; trait_colour_value=%s; entity_colour_name=%s\n",
+      100 * intent.trait_colour_confidence, intent.trait_colour_value.c_str(),
+      intent.entity_colour_name
+    );
     return SUCCESS;
 }
 

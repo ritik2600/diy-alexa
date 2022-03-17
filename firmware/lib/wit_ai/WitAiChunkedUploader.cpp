@@ -78,6 +78,16 @@ Intent WitAiChunkedUploader::getResults()
         filter["intents"][0]["confidence"] = true;
         filter["traits"]["wit$on_off"][0]["value"] = true;
         filter["traits"]["wit$on_off"][0]["confidence"] = true;
+
+        filter["entities"]["red:red"][0]["value"] = true;
+        filter["entities"]["red:red"][0]["confidence"] = true;
+        filter["entities"]["green:green"][0]["value"] = true;
+        filter["entities"]["green:green"][0]["confidence"] = true;
+        filter["entities"]["blue:blue"][0]["value"] = true;
+        filter["entities"]["blue:blue"][0]["confidence"] = true;
+        filter["traits"]["more_or_less"][0]["value"] = true;
+        filter["traits"]["more_or_less"][0]["confidence"] = true;
+
         StaticJsonDocument<500> doc;
         deserializeJson(doc, *m_wifi_client, DeserializationOption::Filter(filter));
 
@@ -89,6 +99,14 @@ Intent WitAiChunkedUploader::getResults()
         const char *trait_value = doc["traits"]["wit$on_off"][0]["value"];
         float trait_confidence = doc["traits"]["wit$on_off"][0]["confidence"];
 
+        const char *entity_colour_name = doc["entities"]["red:red"][0]["value"];
+        if(entity_colour_name)
+          entity_colour_name = doc["entities"]["green:green"][0]["value"];
+        else if(entity_colour_name)
+          entity_colour_name = doc["entities"]["blue:blue"][0]["value"];
+        const char *trait_colour_value = doc["traits"]["more_or_less"][0]["value"];
+        float trait_colour_confidence = doc["traits"]["more_or_less"][0]["confidence"];
+
         return Intent{
             .text = (text ? text : ""),
             .intent_name = (intent_name ? intent_name : ""),
@@ -96,7 +114,11 @@ Intent WitAiChunkedUploader::getResults()
             .device_name = (device_name ? device_name : ""),
             .device_confidence = device_confidence,
             .trait_value = (trait_value ? trait_value : ""),
-            .trait_confidence = trait_confidence};
+            .trait_confidence = trait_confidence,
+            .trait_colour_value = (trait_colour_value ? trait_colour_value : ""),
+            .trait_colour_confidence = trait_colour_confidence,
+            .entity_colour_name = (entity_colour_name ? entity_colour_name : "")
+         };
     }
     return Intent{};
 }

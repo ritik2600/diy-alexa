@@ -15,6 +15,9 @@ typedef struct
     float device_confidence;
     std::string trait_value;
     float trait_confidence;
+    std::string trait_colour_value;
+    float trait_colour_confidence;
+    std::string entity_colour_name;
 } Intent;
 
 class WitAiChunkedUploader

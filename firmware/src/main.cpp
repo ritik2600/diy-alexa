@@ -87,19 +87,27 @@ void setup()
   Serial.println("Starting up");
   // start up wifi
   // launch WiFi
-  /*
+  
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PSWD);
-  */
-  wifiMulti.addAP(_MULTI_SSID1, _MULTI_KEY1);
-  wifiMulti.addAP(_MULTI_SSID2, _MULTI_KEY2);
-  wifiMulti.addAP(_MULTI_SSID3, _MULTI_KEY3);
-  wifiMulti.addAP(_MULTI_SSID4, _MULTI_KEY4);
-  wifiMulti.addAP(_MULTI_SSID5, _MULTI_KEY5);
-  wifiMulti.addAP(_MULTI_SSID6, _MULTI_KEY6);
+  
+  // wifiMulti.addAP(_MULTI_SSID1, _MULTI_KEY1);
+  // wifiMulti.addAP(_MULTI_SSID2, _MULTI_KEY2);
+  // wifiMulti.addAP(_MULTI_SSID3, _MULTI_KEY3);
+  // wifiMulti.addAP(_MULTI_SSID4, _MULTI_KEY4);
+  // wifiMulti.addAP(_MULTI_SSID5, _MULTI_KEY5);
+  // wifiMulti.addAP(_MULTI_SSID6, _MULTI_KEY6);
 
+  // for(int i = 0; i<10; i++) {
+  //   if ((wifiMulti.run() == WL_CONNECTED)) {
+  //     Serial.println("connected to WiFi");
+  //   } else {
+  //     Serial.println("not connected to WiFi");
+  //     delay(200);
+  //   }
+  // }
   for(int i = 0; i<10; i++) {
-    if ((wifiMulti.run() == WL_CONNECTED)) {
+    if (WiFi.status() == WL_CONNECTED) {
       Serial.println("connected to WiFi");
     } else {
       Serial.println("not connected to WiFi");

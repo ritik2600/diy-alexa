@@ -1,7 +1,7 @@
 // WiFi credentials
 #include <marvin-private.h>
-#define WIFI_SSID "<<YOUR SSID>>"
-#define WIFI_PSWD "<<YOUR PASSOWRD>>"
+#define WIFI_SSID "FD-88"
+#define WIFI_PSWD "MyNameIsESP"
 
 // are you using an I2S microphone - comment this out if you want to use an analog mic and ADC input
 #define USE_I2S_MIC_INPUT
@@ -35,3 +35,4 @@
 
 // command recognition settings
 //  TODO #define COMMAND_RECOGNITION_ACCESS_KEY "P5QMUSMFV6IRRSTABXFQ7UIXPFRMC4L5"
+#define COMMAND_RECOGNITION_ACCESS_KEY "I3JP3ZA6N2SVC24DNGH2JA7BFGTDQM5F"

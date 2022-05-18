@@ -2,6 +2,8 @@
 #include "IntentProcessor.h"
 #include "Speaker.h"
 #include <dotstar_wing.h>
+#include "main.h"
+// #include "ServerMachine.h"
 
 IntentProcessor::IntentProcessor(Speaker *speaker)
 {
@@ -73,8 +75,12 @@ IntentResult IntentProcessor::turnOnDevice(const Intent &intent)
 
 IntentResult IntentProcessor::tellJoke()
 {
+    Serial.println("PLAYING JOKE");
     m_speaker->playRandomJoke();
-    return SILENT_SUCCESS;
+    Serial.println("DONE JOKE");
+    // return SILENT_SUCCESS;
+    return SUCCESS;
+
 }
 
 IntentResult IntentProcessor::life()
@@ -91,6 +97,31 @@ IntentResult IntentProcessor::changeColour(const Intent &intent)
       intent.trait_value.c_str(), 100 * intent.trait_confidence
     );
     return SUCCESS;
+}
+
+IntentResult IntentProcessor::startGame(const Intent &intent)
+{
+    Serial.printf(
+      "Game start: confidence=%.f%%; device_name=%s; trait_value=%s; trait_confidence=%.f%%\n",
+      100 * intent.intent_confidence, intent.device_name.c_str(),
+      intent.trait_value.c_str(), 100 * intent.trait_confidence
+    );
+
+    gameOn();
+    return SUCCESS;
+}
+IntentResult IntentProcessor::moveDirection(const Intent &intent)
+{
+    m_speaker->playLife();
+    return SILENT_SUCCESS;
+}
+
+IntentResult IntentProcessor::tellTime()
+{
+    Serial.println("Current time is:7");
+    m_speaker->playRandomJoke();
+    Serial.println("DONE JOKE");
+    return SILENT_SUCCESS;
 }
 
 IntentResult IntentProcessor::processIntent(const Intent &intent)
@@ -110,11 +141,16 @@ IntentResult IntentProcessor::processIntent(const Intent &intent)
     if (intent.intent_name.empty())
     {
         Serial.println("Can't work out what you want to do with the device...");
+        // return tellJoke();
         return FAILED;
     }
     Serial.printf("Intent is %s\n", intent.intent_name.c_str());
+    if(intent.intent_name == "wit$get_time"){
+        return tellTime();
+    }
     if (intent.intent_name == "Turn_on_device")
     {
+        // return tellJoke();
         return turnOnDevice(intent);
     }
     if (intent.intent_name == "Tell_joke")
@@ -128,6 +164,10 @@ IntentResult IntentProcessor::processIntent(const Intent &intent)
     if (intent.intent_name == "Change_colour")
     {
         return changeColour(intent);
+    }
+    if (intent.intent_name == "turn_off_and_on")
+    {
+        return startGame(intent);
     }
 
     return FAILED;

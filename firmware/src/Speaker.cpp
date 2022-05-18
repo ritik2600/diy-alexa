@@ -50,7 +50,9 @@ void Speaker::playCantDo()
 void Speaker::playRandomJoke()
 {
     int joke = random(5);
-    m_i2s_output->setSampleGenerator(m_jokes[joke]);
+    Serial.println("IN PLAY RANDOM JOKE");
+    // m_i2s_output->setSampleGenerator(m_jokes[joke]);
+    m_i2s_output->setSampleGenerator(m_jokes[0]);
 }
 
 void Speaker::playLife()

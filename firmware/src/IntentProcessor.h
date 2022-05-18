@@ -21,6 +21,9 @@ private:
     IntentResult changeColour(const Intent &intent);
     IntentResult tellJoke();
     IntentResult life();
+    IntentResult tellTime();
+    IntentResult startGame(const Intent &intent);
+    IntentResult moveDirection(const Intent &intent);
 
     Speaker *m_speaker;
 
